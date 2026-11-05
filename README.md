@@ -1,4 +1,4 @@
-# Airway RNA-seq Differential Expression Pipeline
+   Rscript scripts/08_go_enrichment.R# Airway RNA-seq Differential Expression Pipeline
 
 A reproducible RNA-seq workflow that finds genes responding to dexamethasone
 (a glucocorticoid steroid) in human airway smooth muscle cells, from raw
