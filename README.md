@@ -26,7 +26,7 @@ flowchart LR
 ```
 
 ## Tools
-FastQC, MultiQC, fastp, Salmon, R, tximport, DESeq2, ggplot2, pheatmap,
+FastQC, MultiQC, fastp, Salmon, R, tximport, DESeq2, clusterProfiler, ggplot2, pheatmap,
 org.Hs.eg.db. The full environment is in `environment.yml`.
 
 ## How to run
@@ -42,6 +42,7 @@ bash scripts/04_make_tx2gene.sh
 bash scripts/05_salmon_index.sh
 bash scripts/06_quant.sh
 Rscript scripts/07_deseq2.R
+Rscript scripts/08_go_enrichment.R
 ```
 
 ## Results
@@ -71,6 +72,28 @@ Top genes by adjusted p-value:
 | SYNPO2 | 1.53 | 3.3e-35 |
 | SERPINA3 | 3.04 | 8.8e-34 |
 
+### GO enrichment (Biological Process)
+Genes were split into up-regulated (log2FC > 1) and down-regulated
+(log2FC < -1) sets at padj < 0.05 and tested against all 13,562 tested genes
+as the background (clusterProfiler, Benjamini-Hochberg correction).
+
+![GO up](results/figures/go_dotplot_upregulated.png)
+![GO down](results/figures/go_dotplot_downregulated.png)
+
+- **Up-regulated genes (31 enriched terms):** include cellular response to
+  hormone stimulus, muscle system process, regulation of actin
+  filament-based process, integrin-mediated signaling and positive
+  regulation of locomotion. The hormone-response term fits the glucocorticoid
+  treatment, and the others point to changes in the contractile and adhesion
+  machinery of smooth muscle cells.
+- **Down-regulated genes (134 enriched terms):** dominated by blood vessel
+  development and morphogenesis, cell migration and motility, and response
+  to mechanical stimulus. This matches the strong down-regulation of
+  extracellular-matrix and signalling genes such as COL1A1, COL3A1 and CXCL12.
+- Cell motility terms appear in both sets, driven by different genes.
+- Terms such as telencephalon and forebrain development most likely reflect
+  shared developmental signalling genes and not brain-specific activity.
+
 ## Interpretation
 - **Pipeline validation:** Four well-known glucocorticoid-responsive genes
   were all strongly up-regulated: KLF15 (log2FC 5.69, padj 7.9e-11),
@@ -90,7 +113,7 @@ Top genes by adjusted p-value:
   differ from a full-depth analysis
 - Only 4 biological replicates per condition
 - Gene-level analysis only, with no isoform-level analysis
-- No pathway or GO enrichment yet
+- GO analysis covers Biological Process only, and the terms are partly redundant
 
 ## Author
 Zainab, M.Sc. Bioinformatics, Jamia Millia Islamia# airway-rnaseq-pipeline
